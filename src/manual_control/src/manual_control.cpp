@@ -12,7 +12,7 @@ class ManualControl : public rclcpp::Node
 public:
     ManualControl() : Node("manual_control_node") {
         pub_ = this->create_publisher<robomas_interfaces::msg::RobomasPacket>("/robomas/cmd", 10);
-        can_pub = this->create_publisher<robomas_interfaces::msg::CanFrame>("/robomas/can_tx", 10);
+        can_pub_ = this->create_publisher<robomas_interfaces::msg::CanFrame>("/robomas/can_tx", 10);
         sub_ = this->create_subscription<sensor_msgs::msg::Joy>(
         "/joy", 
         10, 
@@ -64,7 +64,7 @@ private:
             can_pub_->publish(msg);
         }
         if (right) {
-            msg.id = 0x050
+            msg.id = 0x050;
             msg.dlc = 1;
             msg.data = {0x51};
             can_pub_->publish(msg);
