@@ -32,14 +32,22 @@ private:
 
         float hold_left = joy->buttons[4]; // LB
         float hold_right = joy->buttons[5]; // RB
-        hold(hold_left, hold_right); // 把持回転
+        hold(hold_left, hold_right); // 把持
 
-        float hold_turn_left = joy->buttons[6]; // LT
-        float hold_turn_right = joy->buttons[7]; // RT
+        float hold_turn_left = joy->axes[2]; // LT
+        float hold_turn_right = joy->axes[5]; // RT
         hold_turn(hold_turn_left, hold_turn_right); // 把持回転
+
+        int button_homing = joy->buttons[6]; // Backボタンで原点復帰
+        if (button_homing) {
+            homing();  
+        }
     }
 
-    void lift(int left, int right) {
+    void homing() { // 原点復帰
+
+    }
+    void lift(float left, float right) { // 昇降
         auto msg = robomas_interfaces::msg::RobomasPacket();
         robomas_interfaces::msg::MotorCommand cmd;
         cmd.mode = 1;
@@ -55,7 +63,7 @@ private:
         pub_->publish(msg);
     }
 
-    void hold(int left, int right) {
+    void hold(float left, float right) { // 把持
         auto msg = robomas_interfaces::msg::CanFrame();
         if (left) {
             msg.id = 0x050;
@@ -71,7 +79,7 @@ private:
         }
     }
 
-    void hold_turn(int left, int right) {
+    void hold_turn(float left, float right) { // 把持回転
         auto msg = robomas_interfaces::msg::RobomasPacket();
         robomas_interfaces::msg::MotorCommand cmd;
         cmd.mode = 1;
